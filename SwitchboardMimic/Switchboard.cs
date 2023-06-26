@@ -1,4 +1,6 @@
-﻿namespace SwitchboardMimic
+﻿using SwitchboardMimic;
+
+namespace SwitchboardMimic
 {
     public class Switchboard
     {
@@ -32,7 +34,7 @@
                 Switch sch = Switches.SingleOrDefault(item => item.DeviceId == deviceId);
                 if (sch == null)
                 {
-                    Console.WriteLine("invalid switch");
+                    Console.WriteLine("invalid data");
                 }
                 else
                 {
@@ -55,7 +57,7 @@
                 Switch sch = Switches.SingleOrDefault(item => item.DeviceId == deviceId);
                 if (sch == null)
                 {
-                    Console.WriteLine("invalid switch");
+                    Console.WriteLine("invalid data");
                 }
                 return sch;
             }

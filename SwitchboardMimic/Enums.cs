@@ -13,4 +13,9 @@
         On = 1
     }
 
+    public enum DeviceState
+    {
+        InActive = 0,
+        Active = 1
+    }
 }

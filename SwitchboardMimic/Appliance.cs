@@ -5,5 +5,7 @@
         public int Id;
         public DeviceType DeviceType;
         public string DeviceName;
+        public DeviceState State;
+       
     }
 }
