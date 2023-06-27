@@ -98,15 +98,18 @@ public class Program
             switchboard.Toggle(deviceId, SwitchState.On);
             appliance.State = DeviceState.Active;
         }
+        else if(option == 2)
+        {
+            DisplayMainMenu();
+        }
         else
         {
             Console.WriteLine("invalid selection");
             ShowSubMenu(deviceName, deviceId, state);
         }
     }
-    public static void AddDevice(SwitchState state, string deviceName, DeviceType deviceType)
-    {
-        int deviceId = appliances.Count() + 1;
+    public static void AddDevice(int deviceId, string deviceName, DeviceType deviceType)
+    {        
         Appliance appliance = new Appliance();
         appliance.Id = deviceId;
         appliance.DeviceName = deviceName;
@@ -126,7 +129,7 @@ public class Program
             {
                 int deviceId = appliances.Count() + 1;
                 string deviceName = $"Fan{i}";
-                AddDevice(SwitchState.Off, deviceName, DeviceType.Fan);
+                AddDevice(deviceId, deviceName, DeviceType.Fan);
 
                 // Add SWITCH
                 switchboard.AddSwitch(deviceId);
@@ -140,7 +143,7 @@ public class Program
             {
                 int deviceId = appliances.Count() + 1;
                 string deviceName = $"AC{i}";
-                AddDevice(SwitchState.Off, deviceName, DeviceType.AC);
+                AddDevice(deviceId, deviceName, DeviceType.AC);
 
                 // Add SWITCH
                 switchboard.AddSwitch(deviceId);
@@ -153,7 +156,7 @@ public class Program
             {
                 int deviceId = appliances.Count() + 1;
                 string deviceName = $"Bulb{i}";
-                AddDevice(SwitchState.Off, deviceName, DeviceType.Bulb);
+                AddDevice(deviceId, deviceName, DeviceType.Bulb);
 
                 // Add SWITCH
                 switchboard.AddSwitch(deviceId);
