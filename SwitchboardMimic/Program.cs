@@ -7,75 +7,81 @@ public class Program
     public static void Main(string[] args)
     {
         InitialSetup();
-        DisplayMainMenu();
-    }
-
-    public static void DisplayMainMenu()
-    {
         while (true)
         {
             try
             {
-                Console.WriteLine();
-                Console.WriteLine("Choose an appliance from the menu to operate: ");
-                int count = 1;
-                appliances.ForEach(item =>
-                {
-                    Switch sch = switchboard.GetSwitch(item.Id);
-                    if ((sch.State == SwitchState.On && item.State == DeviceState.Active) || (sch.State == SwitchState.Off && item.State == DeviceState.InActive))
-                    {
-                        string state = sch.State == SwitchState.On ? "ON" : "OFF";
-                        Console.WriteLine($"{count++}.{item.DeviceName} is {state}");
-                    }
-
-                    else
-                    {
-                        Console.WriteLine($"There is inconsistency b/w device and switch. check connection for device{item.Id}");
-                    };
-                });
-
-                Console.WriteLine("Press 0 for exit");
-                Console.WriteLine();
-                int selectedDeviceId = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                if (selectedDeviceId == 0)
-                {
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    Switch sch = switchboard.GetSwitch(selectedDeviceId);
-                    Appliance appliance = appliances.SingleOrDefault(x => x.Id == selectedDeviceId);
-                    if (appliance == null)
-                    {
-                        Console.WriteLine("invalid device selected");
-                    }
-                    else
-                    {
-                        if ((sch.State == SwitchState.On && appliance.State == DeviceState.Active) || (sch.State == SwitchState.Off && appliance.State == DeviceState.InActive))
-                        {
-                            ShowSubMenu(appliance.DeviceName, sch.DeviceId, sch.State);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"There is inconsistency b/w device and switch.");
-                        }
-                    }
-                }
+                DisplayMenu();
+                DoOperation();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                DisplayMainMenu();
             }
         }
     }
 
-    public static void ShowSubMenu(string deviceName, int deviceId, SwitchState state)
+    public static void DisplayMenu()
+    {
+        Console.WriteLine("\nChoose from the option: ");
+        switchboard.Switches.ForEach(sch =>
+        {
+            Appliance appliance = appliances.SingleOrDefault(device => device.Id == sch.DeviceId);
+            if (appliance.DeviceState == sch.SwitchState)
+            {
+                Console.WriteLine($"{sch.Id}.{appliance.DeviceName} is {sch.SwitchState.GetDescription()}");
+            }
+            else
+            {
+                Console.WriteLine("There is inconsistency b/w device and switch. Check your connection.");
+            }
+        });
+        Console.WriteLine("Press 0 for exit");
+        Console.WriteLine();
+    }
+
+    public static void DoOperation()
+    {
+        try
+        {
+            int switchId = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+            if (switchId == 0)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                Switch sch = switchboard.GetSwitch(switchId);
+                Appliance appliance = appliances.SingleOrDefault(x => x.Id == sch.DeviceId);
+                if (appliance == null)
+                {
+                    Console.WriteLine("device not found");
+                }
+                else
+                {
+                    if ((sch.SwitchState == appliance.DeviceState))
+                    {
+                        ShowSubMenu(appliance.DeviceName, sch.DeviceId, sch.SwitchState);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"There is inconsistency b/w device and switch.");
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+
+    public static void ShowSubMenu(string deviceName, int deviceId, State state)
     {
         Console.WriteLine();
-        if (state == SwitchState.On)
+        if (state == State.On)
         {
             Console.WriteLine($"1. Switch {deviceName} OFF");
         }
@@ -88,19 +94,20 @@ public class Program
 
         int option = int.Parse(Console.ReadLine());
         Appliance appliance = appliances.SingleOrDefault(x => x.Id == deviceId);
-        if(option == 1 && state == SwitchState.On)
+        if (option == 1 && state == State.On)
         {
-            switchboard.Toggle(deviceId, SwitchState.Off);
-            appliance.State = DeviceState.InActive;
+            switchboard.Toggle(deviceId, State.Off);
+            appliance.DeviceState = State.Off;
         }
-        else if(option == 1 && state == SwitchState.Off)
+        else if (option == 1 && state == State.Off)
         {
-            switchboard.Toggle(deviceId, SwitchState.On);
-            appliance.State = DeviceState.Active;
+            switchboard.Toggle(deviceId, State.On);
+            appliance.DeviceState = State.On;
         }
-        else if(option == 2)
+        else if (option == 2)
         {
-            DisplayMainMenu();
+            // To get back to menu
+            DisplayMenu();
         }
         else
         {
@@ -108,15 +115,13 @@ public class Program
             ShowSubMenu(deviceName, deviceId, state);
         }
     }
+
     public static void AddDevice(int deviceId, string deviceName, DeviceType deviceType)
-    {        
-        Appliance appliance = new Appliance();
-        appliance.Id = deviceId;
-        appliance.DeviceName = deviceName;
-        appliance.DeviceType = deviceType;
-        appliance.State = DeviceState.InActive;
+    {
+        Appliance appliance = new Appliance(deviceId, deviceType, deviceName, State.Off);
         appliances.Add(appliance);
     }
+
     public static void InitialSetup()
     {
         try
@@ -131,8 +136,8 @@ public class Program
                 string deviceName = $"Fan{i}";
                 AddDevice(deviceId, deviceName, DeviceType.Fan);
 
-                // Add SWITCH
-                switchboard.AddSwitch(deviceId);
+                //  SWITCH
+                switchboard.LinkSwitch(deviceId);
 
             }
 
@@ -146,7 +151,7 @@ public class Program
                 AddDevice(deviceId, deviceName, DeviceType.AC);
 
                 // Add SWITCH
-                switchboard.AddSwitch(deviceId);
+                switchboard.LinkSwitch(deviceId);
             }
 
             // Add bulbs
@@ -159,7 +164,7 @@ public class Program
                 AddDevice(deviceId, deviceName, DeviceType.Bulb);
 
                 // Add SWITCH
-                switchboard.AddSwitch(deviceId);
+                switchboard.LinkSwitch(deviceId);
             }
         }
         catch (Exception ex)

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bootcamp\\Desktop\\Chanchal\\SwitchboardMimic\\SwitchboardMimic.csproj": {}
+    "C:\\Users\\bootcamp\\Desktop\\Chanchal\\Task\\SwitchboardMimic\\SwitchboardMimic.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bootcamp\\Desktop\\Chanchal\\SwitchboardMimic\\SwitchboardMimic.csproj": {
+    "C:\\Users\\bootcamp\\Desktop\\Chanchal\\Task\\SwitchboardMimic\\SwitchboardMimic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\SwitchboardMimic\\SwitchboardMimic.csproj",
+        "projectUniqueName": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\Task\\SwitchboardMimic\\SwitchboardMimic.csproj",
         "projectName": "SwitchboardMimic",
-        "projectPath": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\SwitchboardMimic\\SwitchboardMimic.csproj",
+        "projectPath": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\Task\\SwitchboardMimic\\SwitchboardMimic.csproj",
         "packagesPath": "C:\\Users\\bootcamp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\SwitchboardMimic\\obj\\",
+        "outputPath": "C:\\Users\\bootcamp\\Desktop\\Chanchal\\Task\\SwitchboardMimic\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\bootcamp\\AppData\\Roaming\\NuGet\\NuGet.Config",

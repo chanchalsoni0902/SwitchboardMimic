@@ -7,16 +7,13 @@ namespace SwitchboardMimic
         public int Id;
         public List<Switch> Switches = new List<Switch>();
 
-
-        public void AddSwitch(int deviceId)
+        public void LinkSwitch(int deviceId)
         {
             try
             {
                 // Add new switch
-                Switch sch = new Switch();
-                sch.Id = Switches.Count() + 1;
-                sch.DeviceId = deviceId;
-                sch.State = SwitchState.Off;
+                int id = Switches.Count() + 1;
+                Switch sch = new Switch(id, deviceId, State.Off);
                 Switches.Add(sch);
             }
             catch (Exception ex)
@@ -26,19 +23,19 @@ namespace SwitchboardMimic
             }
         }
 
-        public void Toggle(int deviceId, SwitchState state)
+        public void Toggle(int id, State switchState)
         {
             try
             {
                 // Change state to ON/OFF
-                Switch sch = Switches.SingleOrDefault(item => item.DeviceId == deviceId);
+                Switch sch = Switches.SingleOrDefault(item => item.Id == id);
                 if (sch == null)
                 {
-                    Console.WriteLine("invalid data");
+                    Console.WriteLine("invalid switch");
                 }
                 else
                 {
-                    sch.State = state;
+                    sch.SwitchState = switchState;
                 }
             }
             catch (Exception ex)
@@ -49,12 +46,12 @@ namespace SwitchboardMimic
 
         }
 
-        public Switch GetSwitch(int deviceId)
+        public Switch GetSwitch(int id)
         {
             try
             {
-                // Get Single switch using Device Id
-                Switch sch = Switches.SingleOrDefault(item => item.DeviceId == deviceId);
+                // Get Single switch
+                Switch sch = Switches.SingleOrDefault(item => item.Id == id);
                 if (sch == null)
                 {
                     Console.WriteLine("invalid data");
