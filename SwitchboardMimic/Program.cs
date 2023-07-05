@@ -4,9 +4,11 @@ public class Program
 {
     static Switchboard switchboard = new Switchboard();
     static List<Appliance> appliances = new List<Appliance>();
-    public static void Main(string[] args)
+    public static void Main()
     {
+        // get input from user for no. of appliances
         InitialSetup();
+
         while (true)
         {
             try
@@ -29,7 +31,7 @@ public class Program
             Appliance appliance = appliances.SingleOrDefault(device => device.Id == sch.DeviceId);
             if (appliance.DeviceState == sch.SwitchState)
             {
-                Console.WriteLine($"{sch.Id}.{appliance.DeviceName} is {sch.SwitchState.GetDescription()}");
+                Console.WriteLine($"{sch.Id}.{appliance.DeviceName} is {sch.SwitchState.ToString()}");
             }
             else
             {
